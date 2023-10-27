@@ -16,4 +16,4 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the Docker image
       working-directory: ./bullseye
-      run: docker build . --file Dockerfile --tag joedwards32/cs2:latest
+      run: docker build . --file Dockerfile --tag xe1os/cs2:latest
