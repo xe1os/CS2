@@ -11,16 +11,16 @@ This Docker image contains the dedicated server of the game.
 # How to use this image
 ## Hosting a simple game server
 
-Running on the *host* interface (recommended) using Docker:<br/>
+Running using Docker:
 ```console
-$ docker run -d --net=host --name=cs2 -e STEAMUSER={YOUR_STEAM_USER} -e STEAMPASS={YOUR_STEAM_PASSWD} joedwards32/cs2
+$ docker run -d --name=cs2 -p 27015:27015 -p 27020:27020 joedwards32/cs2
 ```
 
 Running using a bind mount for data persistence on container recreation:
 ```console
 $ mkdir -p $(pwd)/cs2-data
 $ chmod 777 $(pwd)/cs2-data # Makes sure the directory is writeable by the unprivileged container user
-$ docker run -d --net=host -v $(pwd)/cs2-data:/home/steam/cs2-dedicated/ --name=cs2-dedicated -e STEAMUSER={YOUR_STEAM_USER} -e STEAMPASS={YOUR_STEAM_PASSWD} joedwards32/cs2
+$ docker run -d --name=cs2 -v $(pwd)/cs2-data:/home/steam/cs2-dedicated/ -p 27015:27015 -p 27020:27020 joedwards32/cs2
 ```
 
 or using docker-compose, see [examples](https://github.com/joedwards32/CS2/blob/main/examples/docker-compose.yml):
@@ -30,10 +30,6 @@ $ docker compose --file examples/docker-compose.yml up -d cs2-server
 ```
 
 You must have at least **40GB** of free disk space! See [System Requirements](./#system-requirements).
-
-`STEAMUSER` and `STEAMPASS` **are required as unlike CS:GO, CS2 can not be downloaded anonymously (at time of writing).**
-
-`STEAMGUARD` **must be used to provide your more recent Steam Guard key if Steam Guard is enabled on your account.**
 
 **The container will automatically update the game on startup, so if there is a game update just restart the container.**
 
@@ -50,19 +46,11 @@ Minimum system requirements are:
 ## Environment Variables
 Feel free to overwrite these environment variables, using -e (--env): 
 
-### SteamCMD
-
-```dockerfile
-STEAMUSER="changeme"        (Steam User for SteamCMD.)
-STEAMPASS="changeme"        (Password for Steam User.)
-STEAMGUARD=""               (Optional, Steam Guard key if enabled. Use your most recent Steam Guard key.)
-```
-
 ### Server Configuration
 
 ```dockerfile
 CS2_SERVERNAME="changeme"   (Set the visible name for your private server)
-CS2_IP=0.0.0.0              (CS2 server listening IP address, 0.0.0.0 - all IP addresses on the local machine, empty - IP identified automatically)
+CS2_IP=""                   (CS2 server listening IP address, 0.0.0.0 - all IP addresses on the local machine, empty - IP identified automatically)
 CS2_PORT=27015              (CS2 server listen port tcp_udp)
 CS2_RCON_PORT=""            (Optional, use a simple TCP proxy to have RCON listen on an alternative port.
                              Useful for services like AWS Fargate which do not support mixed protocol ports.)
@@ -103,6 +91,17 @@ TV_RELAY_PW="changeme"      (CSTV password for relay proxies)
 TV_MAXRATE=0                (Max CSTV spectator bandwidth rate allowed, 0 == unlimited)
 TV_DELAY=0                  (CSTV broadcast delay in seconds)
 ```
+
+# Customizing this Container
+
+## Pre and Post Hooks
+
+The container includes two scripts for executing custom actions:
+
+* `/home/steam/cs2-dedicated/pre.sh` is executed before the CS2 server starts
+* `/home/steam/cs2-dedicated/post.sh` is executed after the CS2 server stops
+
+When using a persient volume mounted at `/home/steam/cs2-dedicated/` you may edit these scripts to perform custom actions, such as enabling metamod.
 
 # Credits
 
