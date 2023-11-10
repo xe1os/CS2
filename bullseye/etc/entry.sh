@@ -91,6 +91,7 @@ eval "./cs2" -dedicated \
         +sv_lan "${CS2_LAN}" \
 	+host_workshop_collection "${WS_COLLECTION_ID}" \
  	+host_workshop_map "${WS_START_MAP}" \
+  	+sv_setsteamaccount "${CS2_GSLT_TOKEN}" \
         "${CS2_ADDITIONAL_ARGS}"
 
 # Post Hook
