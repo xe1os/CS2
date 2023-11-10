@@ -82,12 +82,15 @@ eval "./cs2" -dedicated \
         -console \
         -usercon \
         -maxplayers "${CS2_MAXPLAYERS}" \
+	-authkey "${WS_API_KEY}" \
         "${CS2_GAME_MODE_ARGS}" \
         +mapgroup "${CS2_MAPGROUP}" \
         +map "${CS2_STARTMAP}" \
         +rcon_password "${CS2_RCONPW}" \
         +sv_password "${CS2_PW}" \
         +sv_lan "${CS2_LAN}" \
+	+host_workshop_collection "${WS_COLLECTION_ID}" \
+ 	+host_workshop_map "${WS_START_MAP}" \
         "${CS2_ADDITIONAL_ARGS}"
 
 # Post Hook
