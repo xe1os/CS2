@@ -40,6 +40,7 @@ RUN set -x \
 FROM build_stage AS bullseye-base
 
 ENV CS2_SERVERNAME="cs2 private server" \
+    CS2_GSLT_TOKEN="" \
     CS2_IP=0.0.0.0 \
     CS2_PORT=27015 \
     CS2_RCON_PORT="" \
@@ -59,6 +60,9 @@ ENV CS2_SERVERNAME="cs2 private server" \
     TV_RELAY_PW="changeme" \
     TV_MAXRATE=0 \
     TV_DELAY=0 \
+    WS_API_KEY="" \
+    WS_COLLECTION_ID="" \
+    WS_START_MAP="" \
     CS2_ADDITIONAL_ARGS=""
 
 # Set permissions on STEAMAPPDIR
