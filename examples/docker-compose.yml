@@ -1,11 +1,12 @@
 version: '3.7'
 services:
   cs2-server:
-    image: joedwards32/cs2
+    image: xe1os/cs2
     container_name: cs2-dedicated
     environment:
       # Server configuration
       - CS2_SERVERNAME=changeme     # (Set the visible name for your private server)
+      - CS2_GSLT_TOKEN=""           # (This token will register your unique server with your Steam account)
       - CS2_PORT=27015              # (CS2 server listen port tcp_udp)
       - CS2_RCON_PORT               # (Optional, use a simple TCP proxy to have RCON listen on an alternative port. Useful for services like AWS Fargate which do not support mixed protocol ports.)
       - CS2_LAN=0                   # (0 - LAN mode disabled, 1 - LAN Mode enabled)
@@ -31,11 +32,15 @@ services:
       - TV_RELAY_PW=changeme        # CSTV password for relay proxies
       - TV_MAXRATE=0                # World snapshots to broadcast per second. Affects camera tickrate.
       - TV_DELAY=0                  # Max CSTV spectator bandwidth rate allowed, 0 == unlimited
+      # Workshop
+      - WS_API_KEY=""               # Required to run workshop maps https://steamcommunity.com/dev/apikey
+      - WS_COLLECTION_ID=""         # Workshop collection id
+      - WS_START_MAP=""             # Workshop start map
     volumes:
-      - cs2:/home/steam/cs2-dedicated/  # (Change /mnt/cs2 according to your volume location)
+      - cs2-data:/home/steam/cs2-dedicated/  # (Change /mnt/cs2 according to your volume location)
     ports:
       - "27015:27015/tcp"           # TCP
       - "27015:27015/udp"           # UDP
       - "27020:27020/udp"           # UDP
 volumes:
-  cs2:
+  cs2-data:
